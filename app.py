@@ -38,3 +38,10 @@ def add_knowledge(text: str):
             "status": "error",
             "message": str(e)
         }
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+#this was the last commit and code i wrote before going to bed
