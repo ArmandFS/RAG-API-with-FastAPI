@@ -16,3 +16,25 @@ def query(q: str):
          prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
     )
     return {"answer": answer["response"]}
+
+
+@app.post("/add")
+def add_knowledge(text: str):
+    """add new content to the knowledge base dynamically"""
+    try:
+
+        import uuid
+        doc_id = str(uuid.uuid4())
+        # add tge text to chroma collection
+        collection.add(documents=[text], ids=[doc_id])
+
+        return {
+            "status": "success",
+            "message": "content added to knowledge base successfully",
+            "id": doc_id    
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
