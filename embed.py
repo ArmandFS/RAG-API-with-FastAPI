@@ -10,4 +10,4 @@ collection.add(documents=[text], ids=["k8s"])
 
 print("Embedding stored in ChromaDB")
 
-#(venv)
+#(venv) and python embed.py
