@@ -1,6 +1,24 @@
 from fastapi import FastAPI
 import chromadb
 import ollama
+import os
+import logging
+
+
+
+
+#implement logging 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    )
+
+MODEL_NAME = os.getenv("OLLAMA_MODEL", "tinyllama")
+logging.info(f"Using Model: {MODEL_NAME}")
+#this logger will be used to log events in the app + timestamps
+
+#also add request logging
+
 
 app = FastAPI()
 chroma = chromadb.PersistentClient(path="./db")
@@ -12,11 +30,11 @@ def query(q: str):
     context = results["documents"] [0][0] if results["documents"] else ""
 
     answer = ollama.generate(
-        model="tinyllama",
+        logging.info(f"query asked: {q}"),
+        model=MODEL_NAME,
          prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
     )
     return {"answer": answer["response"]}
-
 
 @app.post("/add")
 def add_knowledge(text: str):
@@ -25,8 +43,9 @@ def add_knowledge(text: str):
 
         import uuid
         doc_id = str(uuid.uuid4())
-        # add tge text to chroma collection
+        # add the text to chroma collection
         collection.add(documents=[text], ids=[doc_id])
+        logging.info(f"/add received new text (id will be generated)")
 
         return {
             "status": "success",
