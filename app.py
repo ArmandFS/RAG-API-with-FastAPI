@@ -5,8 +5,6 @@ import os
 import logging
 
 
-
-
 #implement logging 
 logging.basicConfig(
     level=logging.INFO,
@@ -18,8 +16,6 @@ logging.info(f"Using Model: {MODEL_NAME}")
 #this logger will be used to log events in the app + timestamps
 
 #also add request logging
-
-
 app = FastAPI()
 chroma = chromadb.PersistentClient(path="./db")
 collection = chroma.get_or_create_collection("docs")
