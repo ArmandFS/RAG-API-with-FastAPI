@@ -31,10 +31,11 @@ def query(q: str):
     context = results["documents"] [0][0] if results["documents"] else ""
     logging.info(f"/query asked: {q}")
 
-    answer = ollama.generate(
-        model=MODEL_NAME,
-         prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
+    answer = ollama_client.generate(
+        model="tinyllama",
+        prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
     )
+
 
     return {"answer": answer["response"]}
 
