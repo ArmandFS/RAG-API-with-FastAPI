@@ -5,6 +5,9 @@ import os
 import logging
 
 
+#what is host.docker.internal?
+#it is a special hostname that lets containers access services on host machine
+
 #implement logging 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,6 +22,8 @@ logging.info(f"Using Model: {MODEL_NAME}")
 app = FastAPI()
 chroma = chromadb.PersistentClient(path="./db")
 collection = chroma.get_or_create_collection("docs")
+ollama_client = ollama.Client(host="http://host.docker.internal:11434")
+
 
 @app.post("/query")
 def query(q: str):
