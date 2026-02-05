@@ -4,7 +4,6 @@ import ollama
 import os
 import logging
 
-
 #what is host.docker.internal?
 #it is a special hostname that lets containers access services on host machine
 
