@@ -16,13 +16,16 @@ logging.basicConfig(
 MODEL_NAME = os.getenv("OLLAMA_MODEL", "tinyllama")
 logging.info(f"Using Model: {MODEL_NAME}")
 #this logger will be used to log events in the app + timestamps
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
+
 
 #also add request logging
 app = FastAPI()
 chroma = chromadb.PersistentClient(path="./db")
 collection = chroma.get_or_create_collection("docs")
-ollama_client = ollama.Client(host="http://host.docker.internal:11434")
-
+#have to rechange this from docker code to host code for testing.
+#ollama_client = ollama.Client(host="http://host.docker.internal:11434")
+ollama_client = ollama.Client(host=OLLAMA_HOST)
 
 @app.post("/query")
 def query(q: str):
