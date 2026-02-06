@@ -45,7 +45,7 @@ def query(q: str):
         #use real LLM (in production mode)
 #what mock does is that it checks USE_MOCK_LLM env variable. If set to 1, returns retrieved context directly
 #it makes it deterministic.
-
+#start api in mock mode using this bash script: USE_MOCK_LLM=1 uvicorn app:app --reload
         answer = ollama.generate(
             model="tinyllama",
             prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
@@ -80,3 +80,5 @@ def health():
     return {"status": "ok"}
 
 #this was the last commit and code i wrote before going to bed
+#some notes -> the ci workflow automatically tests RAG system whenever you push changes to key files.
+#it rebuilds embeddings, starts the API in mock mode, and runs semantic tests. 
