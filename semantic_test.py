@@ -1,26 +1,25 @@
 import requests
+import sys
 
-def test_kubernetes_query():
-    response = requests.post("http://127.0.0.1:8000/query?q=What is Kubernetes?")
-    
-    if response.status_code != 200:
-        raise Exception(f"Server returned {response.status_code}: {response.text}")
-    
-    answer = response.json()["answer"]
-    assert "container" in answer.lower(), "Missing 'container' keyword"
-    print("✅ Kubernetes query test passed")
+BASE_URL = "http://127.0.0.1:8000"
 
-def test_nextwork_query():
-    response = requests.post("http://127.0.0.1:8000/query?q=What is NextWork?")
-    
-    if response.status_code != 200:
-        raise Exception(f"Server returned {response.status_code}: {response.text}")
-    
-    answer = response.json()["answer"]
-    assert "maximus" in answer.lower(), "Missing 'maximus' keyword"
-    print("✅ NextWork query test passed")
+def test_query(question, keyword):
+    print(f"Testing: {question}")
+    try:
+        response = requests.post(f"{BASE_URL}/query", params={"q": question}, timeout=10)
+        response.raise_for_status()
+        
+        answer = response.json().get("answer", "").lower()
+        if keyword.lower() in answer:
+            print(f"✅ Passed: Found '{keyword}'")
+        else:
+            print(f"❌ Failed: Keyword '{keyword}' not in answer: {answer}")
+            sys.exit(1)
+    except Exception as e:
+        print(f"💥 Connection Error: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    test_kubernetes_query()
-    test_nextwork_query()
-    print("All semantic tests passed!")
+    test_query("What is Kubernetes?", "container")
+    test_query("What is NextWork?", "maximus")
+    print("\n🚀 All semantic tests passed!")
