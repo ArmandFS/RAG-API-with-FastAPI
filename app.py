@@ -43,6 +43,9 @@ def query(q: str):
         return {"answer": context}
     else:
         #use real LLM (in production mode)
+#what mock does is that it checks USE_MOCK_LLM env variable. If set to 1, returns retrieved context directly
+#it makes it deterministic.
+
         answer = ollama.generate(
             model="tinyllama",
             prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
